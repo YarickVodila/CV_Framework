@@ -24,8 +24,8 @@ git clone https://github.com/YarickVodila/CV_Framework.git
 ```
 
 2. **Установить необходимые библиотеки и зависимости**
-> [!NOTE]
-> Важно!!! Для использования моделей `Torch` на видеокарте используйте официальную документацию [PyTorch](https://pytorch.org/get-started/locally/) 
+> [!Важно]
+> Для использования моделей `Torch` на видеокарте используйте официальную документацию [PyTorch](https://pytorch.org/get-started/locally/) 
 
 ```py
 pip install -r requirements.txt
