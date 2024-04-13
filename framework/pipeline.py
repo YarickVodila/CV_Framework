@@ -64,6 +64,10 @@ class Pipeline:
         
 
         if any([True if copm in self.base_comp else False for copm in self.pipeline_objs.keys()]) and any([True if copm in self.face_comp else False for copm in self.pipeline_objs.keys()]) and any([True if copm in self.action_cls_comp else False for copm in self.pipeline_objs.keys()]):
+            # Удаляем добавленный компонент
+            
+            self.del_pipe(name)
+            
             raise ValueError(
                 """
                 Все компоненты Pipeline должны быть для одной из задач: 
@@ -75,6 +79,7 @@ class Pipeline:
 
     def del_pipe(self, name):
         del_copmonent = self.pipeline_objs.pop(name, False)
+        del_keywards = self.pipeline_kwargs.pop(name, None)
 
         torch.cuda.empty_cache()
 

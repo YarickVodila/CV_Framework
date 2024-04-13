@@ -27,6 +27,8 @@ class EfficientNetClassification:
         elif torch.device("cuda" if torch.cuda.is_available() else "cpu") == "cuda":
             self.device = device
         
+        else:
+            self.device = device
 
         """
         layers: list | tuple: порядок слоев в модели для классификации
@@ -72,9 +74,13 @@ class EfficientNetClassification:
         #     )
         
         # Если не хотим ничего менять в модели
+
         else:
             print("Модель имеет на выходе 1000 классов, как в датасете ImageNet1K")
             print("Подробная информация о датасете доступна по ссылке  https://paperswithcode.com/dataset/imagenet-1k-1")
+
+
+        self.model.to(self.device)
         
     def __name__(self):
         return 'classification'
