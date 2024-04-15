@@ -11,7 +11,7 @@ from tensorflow.keras import Model
 import tensorflow as tf
 
 class ActionClassification:
-    def __init__(self, input_shape: tuple = (10, 240, 240, 3), num_classes: int = 1):
+    def __init__(self, input_shape: tuple = (10, 240, 240, 3), num_classes: int = 2):
         input = Input(shape=input_shape)
 
         x = self.conv_batchnorm_relu(input, filters = 64, kernel_size = 7, strides = 2)
@@ -28,7 +28,7 @@ class ActionClassification:
 
         optimizer = tf.keras.optimizers.Adam(0.0001)
 
-        if num_classes == 1:
+        if num_classes == 2:
             output = Dense(1, activation ='sigmoid')(x)
             self.model = Model(inputs=input, outputs=output)
             self.model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=[keras.metrics.Precision(), keras.metrics.AUC()])
