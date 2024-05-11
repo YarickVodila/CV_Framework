@@ -18,7 +18,20 @@ state_val = torch.tensor(np.array([state_val.transpose(2, 0, 1)], dtype=np.float
 """
 
 class EfficientNetClassification:
-    def __init__(self, model_size:str = "s", is_trainable:bool = True, transfer_learning:bool = True, layers: list | tuple = None, device: str = 'cuda'):
+    def __init__(self, model_size:str = "s", transfer_learning:bool = True, layers: list | tuple = None, device: str = 'cuda'):
+        """
+        Initialize the EfficientNetClassification model with the specified parameters.
+
+        Parameters:
+            model_size (str): The size of the model ('s', 'm', or 'l').
+            transfer_learning (bool): Flag indicating if transfer learning should be used.
+            layers (list | tuple): The layers to be added to the classification model.
+            device (str): The device to load the model on ('cuda' or 'cpu').
+
+        Returns:
+            None
+            
+        """
 
         
         if torch.device("cuda" if torch.cuda.is_available() else "cpu") == "cpu":

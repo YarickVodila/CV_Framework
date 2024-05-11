@@ -60,10 +60,21 @@ class Pipeline:
             self.pipeline_kwargs['action_classification'] = kwargs
 
         else:
-            raise ValueError("Такого компонента не существует. Доступные компоненты Pipeline: 'classification', 'detection', 'segmentation', 'face_analyze', 'face_recognition', 'action_classification'")
+            raise ValueError("""
+                Такого компонента не существует.
+                Доступные компоненты Pipeline: 
+                             'classification', 
+                             'detection', 
+                             'segmentation', 
+                             'face_analyze', 
+                             'face_recognition', 
+                             'action_classification'
+                """)
         
 
-        if any([True if copm in self.base_comp else False for copm in self.pipeline_objs.keys()]) and any([True if copm in self.face_comp else False for copm in self.pipeline_objs.keys()]) and any([True if copm in self.action_cls_comp else False for copm in self.pipeline_objs.keys()]):
+        if any([True if copm in self.base_comp else False for copm in self.pipeline_objs.keys()]) and \
+            any([True if copm in self.face_comp else False for copm in self.pipeline_objs.keys()]):
+
             # Удаляем добавленный компонент
             
             self.del_pipe(name)
@@ -76,6 +87,38 @@ class Pipeline:
                 3) 'action_classification' - для задач связанных с классификацией действий
                 """
             )
+        elif any([True if copm in self.base_comp else False for copm in self.pipeline_objs.keys()]) and \
+            any([True if copm in self.action_cls_comp else False for copm in self.pipeline_objs.keys()]):
+
+            # Удаляем добавленный компонент
+            
+            self.del_pipe(name)
+            
+            raise ValueError(
+                """
+                Все компоненты Pipeline должны быть для одной из задач: 
+                1) 'classification', 'detection', 'segmentation' - для задач связанных работой любых изображений
+                2) 'face_analyze', 'face_recognition' - для задач связанных с лицами
+                3) 'action_classification' - для задач связанных с классификацией действий
+                """
+            )
+        
+        elif any([True if copm in self.face_comp else False for copm in self.pipeline_objs.keys()]) and \
+            any([True if copm in self.action_cls_comp else False for copm in self.pipeline_objs.keys()]):
+
+            # Удаляем добавленный компонент
+
+            self.del_pipe(name)
+
+            raise ValueError(
+                """
+                Все компоненты Pipeline должны быть для одной из задач: 
+                1) 'classification', 'detection', 'segmentation' - для задач связанных работой любых изображений
+                2) 'face_analyze', 'face_recognition' - для задач связанных с лицами
+                3) 'action_classification' - для задач связанных с классификацией действий
+                """
+            )
+        
 
     def del_pipe(self, name):
         del_copmonent = self.pipeline_objs.pop(name, False)

@@ -82,6 +82,7 @@ class Trainer:
                     **config[comp]
                 )
 
+            # TODO: Распределить по папкам папка 1 - 5 фоток класса 1, 2 - 5 фоток класса 2
             elif comp == "action_classification" and config.get(comp, False):
                 self.pipeline.pipeline_objs["action_classification"].model = self.pipeline.pipeline_objs["action_classification"].model.fit(
                     data_x, 
@@ -91,7 +92,7 @@ class Trainer:
                     **kwargs
                 )
                 
-
+        
 
 
         return self.pipeline
