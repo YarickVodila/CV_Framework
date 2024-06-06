@@ -22,7 +22,7 @@ import PIL
 
 import cv2
 
-from framework.pipeline import Pipeline
+from CV_Framework.framework.pipeline import Pipeline
 
 import pandas as pd
 import numpy as np
@@ -84,7 +84,7 @@ class Trainer:
 
             # TODO: Распределить по папкам папка 1 - 5 фоток класса 1, 2 - 5 фоток класса 2
             elif comp == "action_classification" and config.get(comp, False):
-                self.pipeline.pipeline_objs["action_classification"].model = self.pipeline.pipeline_objs["action_classification"].model.fit(
+                self.pipeline.pipeline_objs["action_classification"].model.fit(
                     data_x, 
                     data_y, 
                     epochs=epochs, 
@@ -231,7 +231,7 @@ class Trainer:
 
     def __resize_img(self, img:np.array) -> np.array: 
         """
-        "Ресайз" изображения до заданных размеров (224, 224).
+        "Ресайз" изображения до заданных размеров (480, 480).
         
         Args:
             img: np.array Исходное изображение
@@ -241,7 +241,7 @@ class Trainer:
         """
 
         # Задание новых размеров изображения
-        new_width, new_height = 224, 224 
+        new_width, new_height = 480, 480 
         
         # Определение текущих размеров изображения
         height, width = img.shape[:2]

@@ -6,6 +6,7 @@ import warnings
 
 import numpy as np
 
+import PIL
 import cv2
 
 from typing import Any, Dict, List, Tuple, Union, Optional
@@ -100,7 +101,7 @@ class EfficientNetClassification:
 
     def resize_img(self, img:np.array) -> torch.tensor: 
         """
-        "Ресайз" изображения до заданных размеров (224, 224).
+        "Ресайз" изображения до заданных размеров (480, 480).
         
         Args:
             img: np.array Исходное изображение
@@ -110,7 +111,7 @@ class EfficientNetClassification:
         """
 
         # Задание новых размеров изображения
-        new_width, new_height = 224, 224 
+        new_width, new_height = 480, 480 
         
         # Определение текущих размеров изображения
         height, width = img.shape[:2]
@@ -155,26 +156,25 @@ class EfficientNetClassification:
         # print(np.array([self.resize_img(img) for img in images]).shape)
 
         if isinstance(images, str):
-            images = cv2.imread(images, cv2.COLOR_BGR2RGB)
-            images = cv2.cvtColor(images, cv2.COLOR_BGR2RGB)
-            tensor_images = torch.tensor([self.resize_img(images)], dtype=torch.float32)
+            images = np.array(PIL.Image.open(images).convert('RGB'))
+            tensor_images = torch.tensor([self.resize_img(images)], dtype=torch.float32).to(self.device)
 
         elif isinstance(images, List):
             if isinstance(images[0], str):
-                images = [cv2.imread(image, cv2.COLOR_BGR2RGB) for image in images]
-                images = [cv2.cvtColor(image, cv2.COLOR_BGR2RGB) for image in images]
-                tensor_images = torch.tensor(np.array([self.resize_img(img) for img in images]), dtype=torch.float32)
+                images = [np.array(PIL.Image.open(image).convert('RGB')) for image in images]
+                tensor_images = torch.tensor(np.array([self.resize_img(img) for img in images]), dtype=torch.float32).to(self.device)
         
         else:
             if len(images.shape) == 3: # Если подаётся одно изображение
-                tensor_images = torch.tensor(np.array([self.resize_img(images)]), dtype=torch.float32)
+                tensor_images = torch.tensor(np.array([self.resize_img(images)]), dtype=torch.float32).to(self.device)
+
             else:
-                tensor_images = torch.tensor(np.array([self.resize_img(img) for img in images]), dtype=torch.float32)
+                tensor_images = torch.tensor(np.array([self.resize_img(img) for img in images]), dtype=torch.float32).to(self.device)
         
-        # print(tensor_images.shape)
-        if return_probs:
-            result = self.model(tensor_images)
-        else:
-            result = torch.argmax(self.model(tensor_images), dim=1)
+        with torch.no_grad():
+            if return_probs:
+                result = self.model(tensor_images).cpu().numpy()
+            else:
+                result = torch.argmax(self.model(tensor_images), dim=1).cpu().numpy()
 
         return result

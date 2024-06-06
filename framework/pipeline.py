@@ -1,9 +1,9 @@
-from framework.moduls.detection import YoloDetection
-from framework.moduls.classification import EfficientNetClassification
-from framework.moduls.segmentation import YoloSegmentation
-from framework.moduls.face_analyze import FaceAnalyze
-from framework.moduls.face_recognition import FaceRecognition
-from framework.moduls.action_classification import ActionClassification
+from CV_Framework.framework.moduls.detection import YoloDetection
+from CV_Framework.framework.moduls.classification import EfficientNetClassification
+from CV_Framework.framework.moduls.segmentation import YoloSegmentation
+from CV_Framework.framework.moduls.face_analyze import FaceAnalyze
+from CV_Framework.framework.moduls.face_recognition import FaceRecognition
+from CV_Framework.framework.moduls.action_classification import ActionClassification
 
 from ultralytics import YOLO
 from tensorflow import keras
