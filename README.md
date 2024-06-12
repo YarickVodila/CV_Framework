@@ -57,9 +57,15 @@ def add_pipe(self, name, **kwargs):
 
 
 <hr/>
+<br/>
 
-
-
+```diff
+- text in red
++ text in green
+! text in orange
+# text in gray
+@@ text in purple (and bold)@@
+```
 
 
 ```py
@@ -72,7 +78,7 @@ def del_pipe(self, name):
 
 
 <hr/>
-
+<br/>
 
 
 
@@ -106,7 +112,7 @@ def save_pipeline(self, path_name: str = 'pipeline'):
 **Метод сохранения компонентов Pipeline**
 
 **Параметры**:
-- `path_name` (str): Название папки, в которую будут сохранены компоненты Pipeline
+- `path_name` (str): Название папки `#0969DA`, в которую будут сохранены компоненты Pipeline
 <hr/>
 
 
@@ -117,7 +123,7 @@ def save_pipeline(self, path_name: str = 'pipeline'):
 ```
 
 <hr/>
-
+<br/>
 
 
 ### Методы класса ActionClassification
