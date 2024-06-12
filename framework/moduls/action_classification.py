@@ -12,6 +12,23 @@ import tensorflow as tf
 
 class ActionClassification:
     def __init__(self, input_shape: tuple = (10, 240, 240, 3), num_classes: int = 2):
+        """
+        Инициализация модели классификации действий.
+
+        Параметры:
+        - input_shape (tuple, необязательный): форма входных данных, по умолчанию (10, 240, 240, 3)
+            - 10 - количество кадров за 1 раз
+            - 240 - высота изображения
+            - 240 - ширина изображения
+            - 3 - количество каналов (RGB)
+        - num_classes (int, необязательный): количество классов, по умолчанию 2
+
+
+        Примечание:
+        - Если входная форма не соответствует вашей задаче, измените параметр "input_shape"
+        - Если выходная форма не соответствует вашей задаче, измените параметр "num_classes"
+        - Если параметр "input_shape" не является кортежем из 4 элементов, будет выброшено исключение ValueError
+        """
         input = Input(shape=input_shape)
 
         x = self.conv_batchnorm_relu(input, filters = 64, kernel_size = 7, strides = 2)
@@ -58,7 +75,18 @@ class ActionClassification:
                             """)
 
     def conv_batchnorm_relu(self, x, filters, kernel_size, strides=1):
-        
+        """
+        Применяет последовательность операций конволюtion, batch normalization и ReLU к входному тензору.
+    
+        Аргументы:
+            x (tf.Tensor): Входной тензор.
+            filters (int): Количество фильтров в конволютной слое.
+            kernel_size (int): Размер фильтра конволютной слоя.
+            strides (int, optional): Степень сдвига конволютной слоя. По умолчанию равен 1.
+    
+        Возвращает:
+            tf.Tensor: Выходной тензор после применения операций конволюtion, batch normalization и ReLU.
+        """
         x = TimeDistributed(Conv2D(filters=filters, kernel_size=kernel_size, strides=strides, padding = 'same'))(x)
         x = TimeDistributed(BatchNormalization())(x)
         x = TimeDistributed(ReLU())(x)
@@ -67,6 +95,16 @@ class ActionClassification:
 
 
     def identity_block(self, tensor, filters):
+        """
+        Производит идентификационный блок в нейронной сети.
+        
+        Аргументы:
+            tensor (tf.Tensor): Входной тензор.
+            filters (int): Количество фильтров.
+        
+        Возвращает:
+            tf.Tensor: Выходной тензор после прохождения идентификационного блока.
+        """
         
         x = self.conv_batchnorm_relu(tensor, filters = filters, kernel_size = 1, strides = 1)
         x = self.conv_batchnorm_relu(x, filters = filters, kernel_size = 3, strides = 1)
@@ -81,6 +119,17 @@ class ActionClassification:
 
 
     def projection_block(self, tensor, filters, strides):
+        """
+        Создает блок проекции в нейронной сети.
+
+        Аргументы:
+            tensor (tf.Tensor): Входной тензор.
+            filters (int): Количество фильтров.
+            strides (int): Шаг сдвига.
+
+        Возвращает:
+            tf.Tensor: Выходной тензор после прохождения блока проекции.
+        """
         
         #left stream
         x = self.conv_batchnorm_relu(tensor, filters = filters, kernel_size = 1, strides = strides)
@@ -99,6 +148,19 @@ class ActionClassification:
 
 
     def resnet_block(self, x, filters, reps, strides):
+        """
+        Создает блок ResNet в нейронной сети.
+
+        Аргументы:
+            self: экземпляр класса
+            x (tf.Tensor): Входной тензор.
+            filters (int): Количество фильтров.
+            reps (int): Количество повторений.
+            strides (int): Шаг сдвига.
+
+        Возвращает:
+            tf.Tensor: Выходной тензор после прохождения блока ResNet.
+        """
         
         x = self.projection_block(x, filters, strides)
         for _ in range(reps-1):
@@ -107,4 +169,14 @@ class ActionClassification:
         return x
     
     def predict(self, x):
+        """
+        Предсказывает выход для данного входного изображения с помощью обученной модели.
+
+        Аргументы:
+            x (numpy.ndarray): Массив с входными данными для предсказания.
+
+        Возвращает:
+            numpy.ndarray: Массив с предсказанными значениями.
+        """
+    
         return self.model.predict(x)

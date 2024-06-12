@@ -44,7 +44,13 @@ class ExampleDataset(Dataset):
 
 class Trainer:
     def __init__(self, pipeline: object):
-        """"""
+        """ 
+        Конструктор класса Trainer.
+
+        Параметры:
+            pipeline (Pipeline):  Объект Pipeline, содержащий модели и компоненты для обработки изображений.
+            
+        """
 
         self.pipeline = pipeline
 
@@ -57,6 +63,20 @@ class Trainer:
         # self.pipeline.save_pipeline()
 
     def train(self, dataset_path, data_x:np.array = None, data_y:np.array = None, epochs:int=10, batch_size:int=4, **kwargs):
+        """ 
+        Метод для тренировки компонентов Pipeline.
+
+        Параметры:
+           dataset_path (str): Путь до директории с датасетом.
+           epochs (int, optional): Количество эпох для обучения. По умолчанию равно 10.
+           batch_size (int, optional): Размер батча. По умолчанию равен 4.
+           **kwargs (dict, optional): Дополнительные параметры для обучения.
+            
+        
+        Возвращаемое значение:
+            pipeline (Pipeline):  Объект Pipeline с обученными моделями.
+        """
+
 
         with open(os.path.join(dataset_path, 'config.json'), 'r') as fp:
             # Загружаем конфиг для тренировки
@@ -97,11 +117,16 @@ class Trainer:
 
         return self.pipeline
             
-    def __train_yolo_models(self,model, **kwargs):
+    def __train_yolo_models(self, model, **kwargs):
         """ 
-        Приватный метод для тренировки компонентов детекции и сегментации
+        Приватный метод для тренировки компонентов детекции или сегментации
 
-        
+        Параметры
+            model (YOLO): Модель YOLO детекции или сегментации
+            **kwargs (dict): Дополнительные параметры для обучения
+
+        Возвращаемое значение:
+            model (YOLO): Модель YOLO детекции или сегментации
         """
 
         results = model.train(**kwargs)
@@ -114,7 +139,20 @@ class Trainer:
         """ 
         Приватный метод для тренировки компонента классификации
 
+        Параметры
+            model (PyTorch): Модель EfficientNetv2 
+            image_train_path (str): Путь до директории с изображениями для обучения
+            labels_train_path (str): Путь до директории с меткой для обучения
+            image_val_path (str, optional): Путь до директории с изображениями для валидации. По умолчанию None
+            labels_val_path (str, optional): Путь до директории с меткой для валидации. По умолчанию None
+            n_classes (int, optional): Количество меток. По умолчанию 2
+            epochs (int, optional): Количество эпох для обучения. По умолчанию 10
+            batch_size (int, optional): Размер батча. По умолчанию 32
+            **kwargs (dict, optional): Дополнительные параметры для обучения
         
+
+        Возвращаемое значение:
+            model (PyTorch): Модель EfficientNetv2
         """
         
         is_val = False
@@ -199,6 +237,14 @@ class Trainer:
         """ 
         Приватный метод для подготовки датасета
 
+        Параметры
+            image_path (str): Путь до директории с изображениями
+            annotation (pd.DataFrame): Датафрейм с меткой
+            n_classes (int, optional): Количество меток. По умолчанию 2
+            device (str, optional): Тип устройства. По умолчанию 'cpu'
+
+        Возвращаемое значение
+            dataset (ExampleDataset): Датасет с изображениями и меткой
         """
         
         # Превращаем id в путь до изображений

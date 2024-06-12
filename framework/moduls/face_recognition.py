@@ -10,7 +10,7 @@ class FaceRecognition:
     def __init__(self, path_embeddings:str = ""):
         """
 
-        Args:
+        Параметры:
             path_embeddings (str, optional): Путь до `embeddings.parquet` файла. По умолчанию "".
         """
 
@@ -33,10 +33,10 @@ class FaceRecognition:
         """
         Нормализация вектора x по L2
         
-        Args:
+        Параметры:
             x (np.ndarray): Массив numpy
 
-        Returns:
+        Возвращает:
             np.ndarray: Нормализованный вектор по L2
         """
         x = np.array(x)
@@ -47,11 +47,11 @@ class FaceRecognition:
         """
         Метод для подсчёта Евклидова расстояния между двумя эмбедингами 
 
-        Args:
+        Параметры:
             embedding1 (np.ndarray(512,)): Массив numpy с эмбедингом 1-го лица
             embedding2 (np.ndarray(512,)): Массив numpy с эмбедингом 2-го лица
 
-        Returns:
+        Возвращает:
             float64: Евклидово расстояние между эмбедингами
         """
         return np.sqrt(np.sum(np.square(np.subtract(embedding1, embedding2))))
@@ -61,11 +61,11 @@ class FaceRecognition:
         """ 
         Метод для анализа изображений путём получения эмбедингов и проверки евклидова расстояния между эмбедингами в базе
 
-        Args:
+        Параметры:
             image: (np.array or str). Путь до исходного изображения или открытое изображение
             append_new_person: (bool). Необходимо ли добавлять новых людей на изображении
         
-        Returns:
+        Возвращает:
             dict: Словарь с ключами `id` и `coords`, где id - уникальный идентификатор человека, coords - координаты лица в виде словаря
             с ключами x, y, w, h.
 

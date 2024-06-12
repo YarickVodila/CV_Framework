@@ -8,8 +8,7 @@ import json
 class FaceAnalyze:
     def __init__(self, save_results:bool = False, save_path:str = ""):
         """
-            
-        Args:
+        Параметры:
             save_results (bool, optional): Необходимо ли сохранять результат анализа в файл `"analyze_id.json"`. По умолчанию False.
             save_path (str, optional): Путь до директории, в которую необходимо сохранять результат анализа. По умолчанию "".
         """
@@ -21,11 +20,11 @@ class FaceAnalyze:
 
     def predict(self, image: Union[str, np.ndarray], id:int = 0, **kwargs):
         """
-        Args:
+        Параметры:
             image (Union[str, np.ndarray]): Путь до исходного изображения или открытое изображение 
             id (int, optional): Идентификатор изображения. По умолчанию 0.
 
-        Returns:
+        Возвращает:
 
             List: Список с результатами анализа. 
 

@@ -34,7 +34,14 @@ class Pipeline:
         return 'pipeline'
     
     def add_pipe(self, name, **kwargs):
-        
+        """ 
+        Метод добавления компонента в pipeline
+
+        Параметры:
+            name (str): Название компонента. Допустимые значения: 'classification', 'detection', 'segmentation', 'face_analyze', 'face_recognition', 'action_classification'
+            **kwargs : Дополнительные аргументы для компонента.
+
+        """
         if name == 'classification':
             self.pipeline_objs['classification'] = EfficientNetClassification(**kwargs)
             self.pipeline_kwargs['classification'] = kwargs
@@ -121,6 +128,14 @@ class Pipeline:
         
 
     def del_pipe(self, name):
+        """ 
+        Метод удаления компонента Pipeline
+
+        Параметры:
+            name (str): Название компонента. Допустимые значения: 'classification', 'detection', 'segmentation', 'face_analyze', 'face_recognition', 'action_classification'
+        
+        """
+
         del_copmonent = self.pipeline_objs.pop(name, False)
         del_keywards = self.pipeline_kwargs.pop(name, None)
 
@@ -131,6 +146,19 @@ class Pipeline:
     
 
     def predict(self, image: Union[str, np.ndarray, List], **kwargs) -> Dict:
+        """ 
+        Метод предсказания компонентов Pipeline
+
+        Параметры:
+            image (Union[str, np.ndarray, List]): Предсказываемое изображение или список изображений.
+            **kwargs: Дополнительные аргументы 
+
+        Возвращаемое значение:
+            result (Dict): Словарь с предсказаниями
+
+        Пример:
+            result = pipeline.predict(image)
+        """
 
         is_base = any([True if copm in self.base_comp else False for copm in self.pipeline_objs.keys()])
         is_face = any([True if copm in self.face_comp else False for copm in self.pipeline_objs.keys()])
@@ -172,6 +200,13 @@ class Pipeline:
 
     #TODO: Сделать сохранение Pipeline
     def save_pipeline(self, path_name: str = 'pipeline'):
+        """ 
+        Метод сохранения компонентов Pipeline
+
+        Параметры:
+            path_name (str): Название папки, в которую будут сохранены компоненты Pipeline
+        """
+
         # torch.save(self.pipeline_objs, path)
 
         try:
@@ -214,6 +249,13 @@ class Pipeline:
             json.dump(components, fp)
 
     def load_pipeline(self, path_name: str = 'pipeline'):
+        """ 
+        Метод загрузки компонентов Pipeline
+
+        Параметры:
+            path_name (str): Название папки, в которой хранятся компоненты Pipeline
+        """
+
 
         with open(os.path.join(path_name, 'components.json'), 'r') as fp:
             # Загружаем компоненты Pipeline и их параметры

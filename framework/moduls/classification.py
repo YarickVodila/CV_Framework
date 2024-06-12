@@ -20,20 +20,26 @@ state_val = torch.tensor(np.array([state_val.transpose(2, 0, 1)], dtype=np.float
 
 class EfficientNetClassification:
     def __init__(self, model_size:str = "s", transfer_learning:bool = True, layers: list | tuple = None, device: str = 'cuda'):
+        """ 
+        Инициализирует экземпляр класса EfficientNetClassification.
+        
+        Аргументы:
+            model_size (str, optional): Размер модели EfficientNet. Должен быть одним из "s", "m" или "l". По умолчанию "s".
+            transfer_learning (bool, optional): Флаг использования трансферного обучения. По умолчанию True.
+            layers (list | tuple, optional): Порядок слоев в модели для классификации. По умолчанию None.
+            device (str, optional): Устройство для обучения. По умолчанию 'cuda'.
+        
+        Исключения:
+            AssertionError: Если model_size не "s", "m" или "l".
+        
+        Примечания:
+            - model_size определяет размер загружаемой модели EfficientNet.
+            - Если transfer_learning установлен в True, веса модели замораживаются, и обучаются только веса классификатора.
+            - Если предоставлены слои, к модели для классификации добавляются новые слои.
+            - Если слои не предоставлены, и is_trainable установлен в True, в модели два нейрона на выходе с стандартными слоями, предложенными авторами модели.
+            - Если не предоставлены ни слои, ни is_trainable, модель имеет 1000 классов на выходе, как в наборе данных ImageNet1K.
+            - Модель перемещается на указанное устройство.
         """
-        Initialize the EfficientNetClassification model with the specified parameters.
-
-        Parameters:
-            model_size (str): The size of the model ('s', 'm', or 'l').
-            transfer_learning (bool): Flag indicating if transfer learning should be used.
-            layers (list | tuple): The layers to be added to the classification model.
-            device (str): The device to load the model on ('cuda' or 'cpu').
-
-        Returns:
-            None
-            
-        """
-
         
         if torch.device("cuda" if torch.cuda.is_available() else "cpu") == "cpu":
             self.device = 'cpu'
@@ -152,6 +158,16 @@ class EfficientNetClassification:
        
 
     def predict(self, images: Union[str, np.ndarray, List], return_probs: bool = False) -> torch.tensor:
+        """
+        Метод предсказывает классы для переданных изображений с помощью модели классификации.
+
+        Args:
+            images (Union[str, np.ndarray, List]): Массив изображений, которые нужно предсказать. Может быть строка, numpy.ndarray или список строк или numpy.ndarray.
+            return_probs (bool, optional): Если True, то возвращает вероятности для каждого класса. По умолчанию False. 
+
+        Returns:
+            torch.tensor: Массив предсказанных классов или вероятностей для каждого класса, в зависимости от значения return_probs.
+        """
         # Перевод массива изображений в тензор
         # print(np.array([self.resize_img(img) for img in images]).shape)
 
