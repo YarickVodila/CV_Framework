@@ -76,16 +76,16 @@ class ActionClassification:
 
     def conv_batchnorm_relu(self, x, filters, kernel_size, strides=1):
         """
-        Применяет последовательность операций конволюtion, batch normalization и ReLU к входному тензору.
+        Применяет последовательность операций свёртки, batch normalization и ReLU к входному тензору.
     
         Аргументы:
             x (tf.Tensor): Входной тензор.
-            filters (int): Количество фильтров в конволютной слое.
-            kernel_size (int): Размер фильтра конволютной слоя.
-            strides (int, optional): Степень сдвига конволютной слоя. По умолчанию равен 1.
+            filters (int): Количество фильтров в свёрточном слое.
+            kernel_size (int): Размер фильтра свёрточном слоя.
+            strides (int, optional): Степень сдвига свёрточном слоя. По умолчанию равен 1.
     
         Возвращает:
-            tf.Tensor: Выходной тензор после применения операций конволюtion, batch normalization и ReLU.
+            tf.Tensor: Выходной тензор после применения операций свёртки, batch normalization и ReLU.
         """
         x = TimeDistributed(Conv2D(filters=filters, kernel_size=kernel_size, strides=strides, padding = 'same'))(x)
         x = TimeDistributed(BatchNormalization())(x)
@@ -96,14 +96,14 @@ class ActionClassification:
 
     def identity_block(self, tensor, filters):
         """
-        Производит идентификационный блок в нейронной сети.
+        Производит блок идентичности в нейронной сети.
         
         Аргументы:
             tensor (tf.Tensor): Входной тензор.
             filters (int): Количество фильтров.
         
         Возвращает:
-            tf.Tensor: Выходной тензор после прохождения идентификационного блока.
+            tf.Tensor: Выходной тензор после прохождения блока идентичности. 
         """
         
         x = self.conv_batchnorm_relu(tensor, filters = filters, kernel_size = 1, strides = 1)
@@ -152,7 +152,6 @@ class ActionClassification:
         Создает блок ResNet в нейронной сети.
 
         Аргументы:
-            self: экземпляр класса
             x (tf.Tensor): Входной тензор.
             filters (int): Количество фильтров.
             reps (int): Количество повторений.

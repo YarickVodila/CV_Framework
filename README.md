@@ -49,7 +49,7 @@ pip install -r requirements.txt
 def add_pipe(self, name, **kwargs):
 ```
 
-**Метод добавления компонента в pipeline**
+>Метод добавления компонента в pipeline
 
 **Параметры:**
 - `name` (str): Название компонента. Допустимые значения: `classification`, `detection`, `segmentation`, `face_analyze`, `face_recognition` `action_classification`
@@ -59,19 +59,12 @@ def add_pipe(self, name, **kwargs):
 <hr/>
 <br/>
 
-```diff
-- text in red
-+ text in green
-! text in orange
-# text in gray
-@@ text in purple (and bold)@@
-```
 
 
 ```py
 def del_pipe(self, name):
 ```
-**Метод удаления компонента Pipeline**
+>Метод удаления компонента Pipeline
 
 **Параметры**:
 - `name` (str): Название компонента. Допустимые значения: `classification`, `detection`, `segmentation`, `face_analyze`, `face_recognition`, `action_classification`
@@ -86,7 +79,7 @@ def del_pipe(self, name):
 def predict(self, image: Union[str, np.ndarray, List], **kwargs) -> Dict:
 ```
 
-**Метод предсказания компонентов Pipeline**
+>Метод предсказания компонентов Pipeline
 
 **Параметры**:
 - `image` (Union[str, np.ndarray, List]): Предсказываемое изображение или список изображений.
@@ -109,18 +102,24 @@ result = pipeline.predict(image)
 ```py
 def save_pipeline(self, path_name: str = 'pipeline'):
 ```
-**Метод сохранения компонентов Pipeline**
+>Метод сохранения компонентов Pipeline
 
 **Параметры**:
 - `path_name` (str): Название папки `#0969DA`, в которую будут сохранены компоненты Pipeline
 <hr/>
-
+<br/>
 
 
 
 ```py
-
+def load_pipeline(self, path_name: str = 'pipeline'):
 ```
+
+>Метод загрузки компонентов Pipeline
+
+**Параметры**:
+- `path_name` (str): Название папки, в которой хранятся компоненты Pipeline
+
 
 <hr/>
 <br/>
@@ -128,17 +127,172 @@ def save_pipeline(self, path_name: str = 'pipeline'):
 
 ### Методы класса ActionClassification
 
+```py
+def __init__(self, input_shape: tuple = (10, 240, 240, 3), num_classes: int = 2):
+```
+
+>Инициализация модели классификации действий.
+
+**Параметры**:
+- `input_shape` (tuple, необязательный): форма входных данных, по умолчанию (10, 240, 240, 3)
+    - 10 - количество кадров за 1 раз
+    - 240 - высота изображения
+    - 240 - ширина изображения
+    - 3 - количество каналов (RGB)
+- `num_classes` (int, необязательный): количество классов, по умолчанию 2
+
+
+**Примечание**:
+- Если входная форма не соответствует вашей задаче, измените параметр "input_shape"
+- Если выходная форма не соответствует вашей задаче, измените параметр "num_classes"
+- Если параметр "input_shape" не является кортежем из 4 элементов, будет выброшено исключение ValueError
+
+<hr/>
+<br/>
+
+
+```py
+def conv_batchnorm_relu(self, x, filters, kernel_size, strides=1):
+```
+
+>Применяет последовательность операций свёртки, batch normalization и ReLU к входному тензору.
+
+**Аргументы**:
+- `x` (tf.Tensor): Входной тензор.
+- `filters` (int): Количество фильтров в свёрточном слое.
+- `kernel_size` (int): Размер фильтра свёрточном слоя.
+- `strides` (int, optional): Степень сдвига свёрточном слоя. По умолчанию равен 1.
+
+**Возвращает**:
+- `tf.Tensor`: Выходной тензор после применения операций свёртки, batch normalization и ReLU.
+
+<hr/>
+<br/>
+
+
+```py
+def identity_block(self, tensor, filters):
+```
+
+>Производит блок идентичности в нейронной сети.
+        
+**Аргументы**:
+- `tensor` (tf.Tensor): Входной тензор.
+- `filters` (int): Количество фильтров.
+
+**Возвращает**:
+- `tf.Tensor`: Выходной тензор после прохождения блока идентичности. 
+
+<hr/>
+<br/>
+
+
+```py
+def projection_block(self, tensor, filters, strides):
+```
+
+>Создает блок проекции в нейронной сети.
+
+**Аргументы**:
+- `tensor` (tf.Tensor): Входной тензор.
+- `filters` (int): Количество фильтров.
+- `strides` (int): Шаг сдвига.
+
+**Возвращает**:
+- `tf.Tensor`: Выходной тензор после прохождения блока проекции.
+
+<hr/>
+<br/>
+
+
+```py
+def resnet_block(self, x, filters, reps, strides):
+```
+
+>Создает блок ResNet в нейронной сети.
+
+**Аргументы**:
+- `x` (tf.Tensor): Входной тензор.
+- `filters` (int): Количество фильтров.
+- `reps` (int): Количество повторений.
+- `strides` (int): Шаг сдвига.
+
+**Возвращает**:
+- `tf.Tensor`: Выходной тензор после прохождения блока ResNet.
+
+<hr/>
+<br/>
+
+
+```py
+def predict(self, x):
+```
+
+>Предсказывает выход для данного входного изображения с помощью обученной модели.
+
+`Аргументы`:
+- `x` (numpy.ndarray): Массив с входными данными для предсказания.
+
+`Возвращает`:
+- `numpy.ndarray`: Массив с предсказанными значениями.
+
+<hr/>
+<br/>
+
+
 
 ### Методы класса EfficientNetClassification
+
+```py
+
+```
+
+>
+
+<hr/>
+<br/>
 
 
 ### Методы класса YoloDetection
 
+```py
+
+```
+
+>
+
+<hr/>
+<br/>
 
 ### Методы класса YoloSegmentation
 
+```py
+
+```
+
+>
+
+<hr/>
+<br/>
 
 ### Методы класса FaceAnalyze
 
+```py
+
+```
+
+>
+
+<hr/>
+<br/>
 
 ### Методы класса FaceRecognition
+
+```py
+
+```
+
+>
+
+<hr/>
+<br/>
