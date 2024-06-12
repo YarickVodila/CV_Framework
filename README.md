@@ -45,6 +45,81 @@ pip install -r requirements.txt
 ### Методы класса Pipeline
 
 
+```py
+def add_pipe(self, name, **kwargs):
+```
+
+**Метод добавления компонента в pipeline**
+
+**Параметры:**
+- `name` (str): Название компонента. Допустимые значения: `classification`, `detection`, `segmentation`, `face_analyze`, `face_recognition` `action_classification`
+- `**kwargs` : Дополнительные аргументы для компонента.
+
+
+<hr/>
+
+
+
+
+
+```py
+def del_pipe(self, name):
+```
+**Метод удаления компонента Pipeline**
+
+**Параметры**:
+- `name` (str): Название компонента. Допустимые значения: `classification`, `detection`, `segmentation`, `face_analyze`, `face_recognition`, `action_classification`
+
+
+<hr/>
+
+
+
+
+```py
+def predict(self, image: Union[str, np.ndarray, List], **kwargs) -> Dict:
+```
+
+**Метод предсказания компонентов Pipeline**
+
+**Параметры**:
+- `image` (Union[str, np.ndarray, List]): Предсказываемое изображение или список изображений.
+- `**kwargs`: Дополнительные аргументы 
+
+**Возвращаемое значение**:
+- `result` (Dict): Словарь с предсказаниями
+
+**Пример**:
+
+```py
+result = pipeline.predict(image)
+```
+
+<hr/>
+<br/>
+
+
+
+```py
+def save_pipeline(self, path_name: str = 'pipeline'):
+```
+**Метод сохранения компонентов Pipeline**
+
+**Параметры**:
+- `path_name` (str): Название папки, в которую будут сохранены компоненты Pipeline
+<hr/>
+
+
+
+
+```py
+
+```
+
+<hr/>
+
+
+
 ### Методы класса ActionClassification
 
 
