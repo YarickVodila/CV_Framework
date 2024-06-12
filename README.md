@@ -7,6 +7,7 @@
 2. [Установка](#установка)
 3. [Документация](#документация)
     - [Методы класса Pipeline](#методы-класса-pipeline)
+    - [Методы класса Trainer](#методы-класса-trainer)
     - [Методы класса ActionClassification](#методы-класса-actionclassification)
     - [Методы класса EfficientNetClassification](#методы-класса-efficientnetclassification)
     - [Методы класса YoloDetection](#методы-класса-yolodetection)
@@ -14,6 +15,8 @@
     - [Методы класса FaceAnalyze](#методы-класса-faceanalyze)
     - [Методы класса FaceRecognition](#методы-класса-facerecognition)
 
+4. [Организация датасета](#организация-датасета)
+5. [Примеры использования](#примеры-использования)
 ## Описание
 
 
@@ -123,6 +126,121 @@ def load_pipeline(self, path_name: str = 'pipeline'):
 
 <hr/>
 <br/>
+
+### Методы класса Trainer
+
+```py
+def __init__(self, pipeline: object):
+```
+
+>Конструктор класса Trainer.
+
+**Параметры**:
+- `pipeline` (Pipeline):  Объект Pipeline, содержащий модели и компоненты для обработки изображений.
+
+
+<hr/>
+<br/>
+
+
+```py
+def train(self, dataset_path, data_x:np.array = None, data_y:np.array = None, epochs:int=10, batch_size:int=4, **kwargs):
+```
+
+>Метод для тренировки компонентов Pipeline.
+
+**Параметры**:
+- `dataset_path` (str): Путь до директории с датасетом.
+- `epochs` (int, optional): Количество эпох для обучения. По умолчанию равно 10.
+- `batch_size` (int, optional): Размер батча. По умолчанию равен 4.
+- `**kwargs` (dict, optional): Дополнительные параметры для обучения.
+    
+
+**Возвращаемое значение**:
+- `pipeline` (Pipeline):  Объект Pipeline с обученными моделями.
+
+<hr/>
+<br/>
+
+
+```py
+def __train_yolo_models(self, model, **kwargs):
+```
+
+>Приватный метод для тренировки компонентов детекции или сегментации
+
+**Параметры**
+- `model` (YOLO): Модель YOLO детекции или сегментации
+- `**kwargs` (dict): Дополнительные параметры для обучения
+
+**Возвращаемое значение**:
+- `model` (YOLO): Модель YOLO детекции или сегментации
+
+
+<hr/>
+<br/>
+
+```py
+def __train_classification(self, model, device, image_train_path:str, labels_train_path:str, image_val_path:str = None, labels_val_path:str = None, n_classes:int = 2,  epochs:int = 10, batch_size = 32, **kwargs):
+```
+
+>Приватный метод для тренировки компонента классификации
+
+**Параметры**
+- `model` (PyTorch): Модель EfficientNetv2 
+- `image_train_path` (str): Путь до директории с изображениями для обучения
+- `labels_train_path` (str): Путь до директории с меткой для обучения
+- `image_val_path` (str, optional): Путь до директории с изображениями для валидации. По умолчанию None
+- `labels_val_path` (str, optional): Путь до директории с меткой для валидации. По умолчанию None
+- `n_classes` (int, optional): Количество меток. По умолчанию 2
+- `epochs` (int, optional): Количество эпох для обучения. По умолчанию 10
+- `batch_size` (int, optional): Размер батча. По умолчанию 32
+- `**kwargs` (dict, optional): Дополнительные параметры для обучения
+
+
+**Возвращаемое значение**:
+- `model` (PyTorch): Модель EfficientNetv2
+
+
+<hr/>
+<br/>
+
+
+```py
+def __prepare_dataset(self, image_path, annotation, n_classes = 2, device = 'cpu'):
+```
+
+>Приватный метод для подготовки датасета
+
+**Параметры**
+- `image_path` (str): Путь до директории с изображениями
+- `annotation` (pd.DataFrame): Датафрейм с меткой
+- `n_classes` (int, optional): Количество меток. По умолчанию 2
+- `device` (str, optional): Тип устройства. По умолчанию 'cpu'
+
+**Возвращаемое значение**
+- `dataset` (ExampleDataset): Датасет с изображениями и меткой
+
+
+<hr/>
+<br/>
+
+
+```py
+def __resize_img(self, img:np.array) -> np.array: 
+```
+
+>"Ресайз" изображения до заданных размеров (480, 480).
+        
+Параметры:
+- `img`: np.array Исходное изображение
+
+Возвращаемое значение:
+- `torch.tensor` "Ресайзнутое" изображение в формате torch.tensor
+
+<hr/>
+<br/>
+
 
 
 ### Методы класса ActionClassification
@@ -557,3 +675,9 @@ def predict(self, image: Union[str, np.ndarray], append_new_person:bool = True, 
 
 <hr/>
 <br/>
+
+## Организация датасета
+
+
+## Примеры использования
+
