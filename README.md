@@ -108,7 +108,7 @@ def save_pipeline(self, path_name: str = 'pipeline'):
 >Метод сохранения компонентов Pipeline
 
 **Параметры**:
-- `path_name` (str): Название папки `#0969DA`, в которую будут сохранены компоненты Pipeline
+- `path_name` (str): Название папки, в которую будут сохранены компоненты Pipeline
 <hr/>
 <br/>
 
