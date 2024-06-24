@@ -678,6 +678,112 @@ def predict(self, image: Union[str, np.ndarray], append_new_person:bool = True, 
 
 ## Организация датасета
 
+Чтобы создать датасет для обучения компонентов `classification`, `detection`, `segmentation` необходимо
+
+1. создать папку
+2. в папке создать файл `config.json`, пример конфигурации представлен ниже
+
+```json
+{
+    "classification": {
+        "image_train_path": "test_dataset\\generated-or-not\\images",
+        "labels_train_path": "test_dataset\\generated-or-not\\train.csv",
+        "image_val_path": "test_dataset\\generated-or-not\\images_val",
+        "labels_val_path": "test_dataset\\generated-or-not\\val.csv",
+        "n_classes": 2,
+        "epochs": 1, 
+        "batch_size": 32
+    },
+
+    "detection": {
+        "data": "test_dataset\\create_coco.v1i.yolov8\\data.yaml",
+        "epochs" : 10
+    },
+
+    "segmentation": {
+        "data": "test_dataset\\meat.v2i.yolov8\\data.yaml",
+        "epochs" : 10
+    },
+
+    "action_classification": true
+}
+```
+> [!NOTE]
+> `train.csv` и `val.csv` файлы должны иметь столбцы `id` (путь до изображений) и `target` (метка класса). Для компонентов детекции и сегментации датасет создаётся как представлено в документации `Ultralitics`.
+
+
+> [!NOTE]
+> Для классификации действий необходимо вручную предобработать датасет и создать ряды изображений с меткой и передать в метод `train` у объекта `Trainer`, а также доп параметры (количество эпох, размер батча).
+
+
 
 ## Примеры использования
 
+
+**Пример добавление компонента классификации с выбором модели**
+
+```python
+from CV_Framework.framework.pipeline import Pipeline
+pipe = Pipeline()
+pipe.add_pipe('classification', model_size = 's', transfer_learning = False)
+```
+
+```python
+from CV_Framework.framework.pipeline import Pipeline
+pipe = Pipeline()
+pipe.add_pipe(
+    'classification', 
+    model_size = 's', 
+    transfer_learning = True,
+    layers = (
+        nn.Dropout(p=0.2, inplace=True), 
+        nn.Linear(in_features=1280, out_features=128, bias=True), 
+        nn.Linear(in_features=128, out_features=2, bias=True)
+    )
+)
+```
+
+**Пример использования компонентов анализа лиц**
+
+```python
+from CV_Framework.framework.pipeline import Pipeline
+pipe = Pipeline()
+
+pipe.add_pipe('face_analyze')
+pipe.add_pipe('face_recognition')
+
+result_1 = pipe.predict("image.png", append_new_person = True)
+# result_2 = pipe.predict("image.png", append_new_person = False)
+```
+
+**Пример обучения компонентов**
+
+```python
+from CV_Framework.framework.trainer import Trainer
+from CV_Framework.framework.pipeline import Pipeline
+
+pipeline = Pipeline()
+
+pipeline.add_pipe("classification", model_size = 's', transfer_learning = True, layers = [nn.Linear(1280, 1), nn.Sigmoid()], device = 'cuda')
+
+trainer = Trainer(pipeline)
+
+trainer.train(dataset_path="test_dataset")
+```
+
+**Пример обучения компонента классификации действий**
+
+```python
+from CV_Framework.framework.trainer import Trainer
+from CV_Framework.framework.pipeline import Pipeline
+
+pipe = Pipeline()
+pipe.add_pipe('action_classification', input_shape = (10, 160, 160, 3), num_classes = 2)
+
+trainer.train(
+    dataset_path="test_dataset",
+    data_x = data, 
+    data_y = target, 
+    epochs = 10, 
+    batch_size = 2)
+```
